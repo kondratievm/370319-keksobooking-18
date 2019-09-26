@@ -3,13 +3,13 @@
 var map = document.querySelector('.map');
 map.classList.remove('map--faded');
 
-var getRandomInt = function (min, max) {
+var getRandomCount = function (min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min;
 };
 
-var getRandomInts = function (max) {
+var getRandomInt = function (max) {
   return Math.floor(Math.random() * Math.floor(max));
 };
 
@@ -20,11 +20,12 @@ var getRandomElement = function (elements) {
 var MAP_PINS = document.querySelector('.map__pins');
 var AD_COUNT = 8;
 var OFFER_TYPES = ['palace', 'flat', 'house', 'bungalo'];
-var OFFER_ROOMS = getRandomInt(1, 5);
-var OFFER_GUESTS = getRandomInt(1, 4);
+// var OFFER_ROOMS = getRandomCount(1, 5);
+var OFFER_TITLES = ['Отель Prince', 'Отель APA Asakusa Taharamachi Ekimae', 'Отель APA Hotel Shinagawa Sengakuji Eki-Mae'];
+var OFFER_GUESTS = getRandomCount(1, 4);
 var OFFER_CHECKINS = ['12:00', '13:00', '14:00'];
 var OFFER_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-var OFFER_DESCRIPTION = 'Some description text';
+var OFFER_DESCRIPTIONS = ['Находится рядом с железнодорожным вокзалом Синагава, от которого можно за 25 минут доехать до аэропорта Ханэда.', 'Удобно расположен всего в 1 минуте ходьбы от станции метро Tawaramachi', 'расположен в 2 минутах ходьбы от станции метро Sengakuji', 'расположен в оживленном квартале Кабуки-тё, в 6 минутах ходьбы от железнодорожной станции Shinjuku'];
 var OFFER_PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 
 var createAds = function (count) {
@@ -35,19 +36,19 @@ var createAds = function (count) {
       avatar: 'img/avatars/user0' + (i + 1) + '.png'
     };
     adsObject.offer = {
-      title: '600, 350',
-      price: 1000,
-      type: OFFER_TYPES[getRandomInts(OFFER_TYPES.length)],
-      rooms: OFFER_ROOMS,
+      title: OFFER_TITLES[getRandomElement(OFFER_TITLES.length)],
+      price: getRandomCount(10, 75) * 100,
+      type: OFFER_TYPES[getRandomInt(OFFER_TYPES.length)],
+      rooms: getRandomCount(1, 5),
       guests: OFFER_GUESTS,
-      checkin: OFFER_CHECKINS[getRandomInts(OFFER_CHECKINS.length)],
+      checkin: OFFER_CHECKINS[getRandomInt(OFFER_CHECKINS.length)],
       features: OFFER_FEATURES[getRandomElement(OFFER_FEATURES.length)],
-      description: OFFER_DESCRIPTION,
+      description: OFFER_DESCRIPTIONS[getRandomElement(OFFER_DESCRIPTIONS.length)],
       photos: OFFER_PHOTOS[getRandomElement(OFFER_PHOTOS.length)]
     };
     adsObject.location = {
-      x: getRandomInt(0, window.outerWidth),
-      y: getRandomInt(130, 630)
+      x: getRandomCount(0, window.outerWidth),
+      y: getRandomCount(130, 630)
     };
     ads[i] = adsObject;
   }
