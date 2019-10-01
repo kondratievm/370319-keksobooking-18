@@ -9,10 +9,6 @@ var getRandomCount = function (min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 };
 
-var getRandomInt = function (max) {
-  return Math.floor(Math.random() * Math.floor(max));
-};
-
 var getRandomElement = function (elements) {
   return elements[Math.floor(Math.random() * elements.length)];
 };
