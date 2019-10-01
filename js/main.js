@@ -45,11 +45,11 @@ var createAds = function (count) {
     adsObject.offer = {
       title: getRandomElement(OFFER_TITLES),
       price: getRandomCount(10, 75) * 100,
-      type: OFFER_TYPES[getRandomInt(OFFER_TYPES.length - 1)],
+      type: getRandomElement(OFFER_TYPES),
       rooms: getRandomCount(1, 5),
       guests: getRandomCount(1, 4),
-      checkin: OFFER_CHECKINS[getRandomInt(OFFER_CHECKINS.length)],
-      checkout: OFFER_CHECKOUTS[getRandomInt(OFFER_CHECKOUTS.length)],
+      checkin: getRandomElement(OFFER_CHECKINS),
+      checkout: getRandomElement(OFFER_CHECKOUTS),
       features: getRandomElement(OFFER_FEATURES),
       description: getRandomElement(OFFER_DESCRIPTIONS),
       photos: OFFER_PHOTOS
@@ -80,14 +80,15 @@ var renderElements = function (array) {
 };
 
 var offerTranslatter = function (type) {
-  if (type === 'flat') {
-    return 'Квартира';
-  } else if (type === 'bungalo') {
-    return 'Бунгало';
-  } else if (type === 'house') {
-    return 'Дом';
-  } else if (type === 'palace') {
-    return 'Дворец';
+  switch (type) {
+    case 'flat': type = 'Квартира';
+      break;
+    case 'bungalo': type = 'Бунгало';
+      break;
+    case 'house': type = 'Дом';
+      break;
+    case 'palace': type = 'Дворец';
+      break;
   }
   return type;
 };
