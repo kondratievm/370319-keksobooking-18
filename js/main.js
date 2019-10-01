@@ -59,8 +59,6 @@ var createAds = function (count) {
   return ads;
 };
 
-var pinImg = document.querySelector('.map__pin > img');
-
 var renderElements = function (array) {
   var template = document.querySelector('#pin').content.querySelector('.map__pin');
   var fragment = document.createDocumentFragment();
@@ -68,6 +66,7 @@ var renderElements = function (array) {
   for (var i = 0; i < array.length; i++) {
     var element = template.cloneNode(true);
     element.setAttribute('style', 'left: ' + array[i].location.x + 'px; top: ' + array[i].location.y + 'px;');
+    var pinImg = element.querySelector('img');
     pinImg.setAttribute('src', array[i].author.avatar);
     pinImg.setAttribute('alt', array[i].offer.title);
     fragment.appendChild(element);
@@ -103,6 +102,7 @@ var renderPhotos = function (adPhoto) {
 };
 
 var renderAd = function (adElement, element) {
+  adElement.querySelector('.popup__avatar').src = element.author.avatar;
   adElement.querySelector('.popup__title').textContent = element.offer.title;
   adElement.querySelector('.popup__text--address').textContent = element.offer.address;
   adElement.querySelector('.popup__text--price').textContent = element.offer.price + '₽/ночь';
@@ -112,7 +112,6 @@ var renderAd = function (adElement, element) {
   adElement.querySelector('.popup__features').textContent = element.offer.features;
   adElement.querySelector('.popup__description').textContent = element.offer.description;
   renderPhotos(adElement);
-  adElement.querySelector('.popup__avatar').src = element.author.avatar;
 };
 
 var renderAds = function (array) {
