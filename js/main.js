@@ -183,38 +183,25 @@ activatePin.addEventListener('keydown', function (evt) {
   }
 });
 
-var roomCount = document.querySelector('#room_number');
-var placeCount = document.querySelector('#capacity');
-var roomCnangeCount;
-// var placeChangeCount;
-var roomForTwo = placeCount.querySelectorAll('option')[1];
-var roomForThree = placeCount.querySelectorAll('option')[0];
-var roomForOne = placeCount.querySelectorAll('option')[2];
-var roomForNobody = placeCount.querySelectorAll('option')[3];
+var roomsCount = document.querySelector('#room_number');
+var placesCount = document.querySelector('#capacity');
+var capacityOptions = placesCount.options;
 
-roomCount.addEventListener('change', function (e) {
-  // console.log('Changed to: ' + e.target.value);
-  roomCnangeCount = e.target.value;
-
-  if (roomCnangeCount === 1) {
-    roomForTwo.setAttribute('disabled', 'disabled');
-    roomForThree.setAttribute('disabled', 'disabled');
-    roomForNobody.setAttribute('disabled', 'disabled');
-  } else if (roomCnangeCount === 2) {
-    roomForThree.setAttribute('disabled', 'disabled');
-    roomForNobody.setAttribute('disabled', 'disabled');
-
-    roomForTwo.removeAttribute('disabled', 'disabled');
-    roomForOne.removeAttribute('disabled', 'disabled');
-  } else if (roomCnangeCount === 3) {
-    roomForNobody.setAttribute('disabled', 'disabled');
-
-    roomForTwo.removeAttribute('disabled', 'disabled');
-    roomForThree.removeAttribute('disabled', 'disabled');
-    roomForOne.removeAttribute('disabled', 'disabled');
-  } else {
-    roomForTwo.setAttribute('disabled', 'disabled');
-    roomForNobody.setAttribute('disabled', 'disabled');
-    roomForOne.setAttribute('disabled', 'disabled');
+var addDisabled = function () {
+  for (var i = 0; i < capacityOptions.length; i++) {
+    capacityOptions[i].setAttribute('disabled', 'disabled');
   }
-});
+};
+
+addDisabled();
+
+var changeOption = function () {
+  for (var i = 0; i <= roomsCount.value - 1; i++) {
+    if (roomsCount.value < 100) {
+      capacityOptions[i].removeAttribute('disabled', 'disabled');
+    }
+  }
+};
+
+roomsCount.addEventListener('change', addDisabled);
+roomsCount.addEventListener('change', changeOption);
