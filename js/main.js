@@ -1,8 +1,5 @@
 'use strict';
 
-var map = document.querySelector('.map');
-map.classList.remove('map--faded');
-
 var getRandomCount = function (min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -21,6 +18,7 @@ var createPhotoArr = function (min, max) {
   return photos;
 };
 
+var ENTER_KEYCODE = 13;
 var MAP_PINS = document.querySelector('.map__pins');
 var AD_COUNT = 8;
 var OFFER_TYPES = ['flat', 'bungalo', 'house', 'palace'];
@@ -128,5 +126,83 @@ var renderAds = function (array) {
 };
 
 var ads = createAds(AD_COUNT);
-renderAds(ads);
-renderElements(ads);
+
+var sectionForm = document.querySelector('.notice');
+var sectionFieldset = sectionForm.querySelectorAll('fieldset');
+
+var checkDisabled = function () {
+  for (var i = 0; i < sectionFieldset.length; i++) {
+    sectionFieldset[i].setAttribute('disabled', 'disabled');
+  }
+};
+
+checkDisabled();
+
+var removeDisabled = function () {
+  for (var i = 0; i < sectionFieldset.length; i++) {
+    sectionFieldset[i].removeAttribute('disabled', 'disabled');
+  }
+};
+
+var activatePin = document.querySelector('.map__pin--main');
+var addressInput = document.querySelector('#address');
+var map = document.querySelector('.map');
+var form = document.querySelector('.ad-form');
+
+var openPage = function () {
+  map.classList.remove('map--faded');
+};
+
+var getPinCoords = function () {
+  var mainPinCoords = activatePin.getBoundingClientRect().x + ' ' + activatePin.getBoundingClientRect().y;
+
+  addressInput.value = mainPinCoords;
+};
+
+var pageActivate = function () {
+  openPage();
+  form.classList.remove('ad-form--disabled');
+
+  renderAds(ads);
+  renderElements(ads);
+  getPinCoords();
+};
+
+activatePin.addEventListener('mousedown', function () {
+  pageActivate();
+  removeDisabled();
+});
+
+activatePin.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    openPage();
+    pageActivate();
+    removeDisabled();
+  }
+});
+
+var roomsCount = document.querySelector('#room_number');
+var placesCount = document.querySelector('#capacity');
+var placeNotForGuests = placesCount.querySelectorAll('option')[3];
+var capacityOptions = placesCount.options;
+
+var disableAllCapacityOptions = function () {
+  for (var i = 0; i < capacityOptions.length; i++) {
+    capacityOptions[i].setAttribute('disabled', 'disabled');
+  }
+};
+
+disableAllCapacityOptions();
+
+var changeOption = function () {
+  for (var i = 0; i <= roomsCount.value - 1; i++) {
+    if (roomsCount.value < 100) {
+      capacityOptions[i].removeAttribute('disabled', 'disabled');
+    } else if (roomsCount.value === 100 || i > 3) {
+      placeNotForGuests.removeAttribute('disabled', 'disabled');
+    }
+  }
+};
+
+roomsCount.addEventListener('change', disableAllCapacityOptions);
+roomsCount.addEventListener('change', changeOption);
