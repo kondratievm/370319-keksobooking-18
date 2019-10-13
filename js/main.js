@@ -126,8 +126,6 @@ var renderAds = function (array) {
 };
 
 var ads = createAds(AD_COUNT);
-// renderAds(ads);
-// renderElements(ads);
 
 var sectionForm = document.querySelector('.notice');
 var sectionFieldset = sectionForm.querySelectorAll('fieldset');
@@ -185,23 +183,26 @@ activatePin.addEventListener('keydown', function (evt) {
 
 var roomsCount = document.querySelector('#room_number');
 var placesCount = document.querySelector('#capacity');
+var placeNotForGuests = placesCount.querySelectorAll('option')[3];
 var capacityOptions = placesCount.options;
 
-var addDisabled = function () {
+var disableAllCapacityOptions = function () {
   for (var i = 0; i < capacityOptions.length; i++) {
     capacityOptions[i].setAttribute('disabled', 'disabled');
   }
 };
 
-addDisabled();
+disableAllCapacityOptions();
 
 var changeOption = function () {
   for (var i = 0; i <= roomsCount.value - 1; i++) {
     if (roomsCount.value < 100) {
       capacityOptions[i].removeAttribute('disabled', 'disabled');
+    } else if (roomsCount.value === 100 || i > 3) {
+      placeNotForGuests.removeAttribute('disabled', 'disabled');
     }
   }
 };
 
-roomsCount.addEventListener('change', addDisabled);
+roomsCount.addEventListener('change', disableAllCapacityOptions);
 roomsCount.addEventListener('change', changeOption);
