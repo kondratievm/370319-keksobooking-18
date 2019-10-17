@@ -22,6 +22,7 @@ var createPhotoArr = function (min, max) {
 };
 
 var ENTER_KEYCODE = 13;
+var ESC_KEYCODE = 27;
 var MAP_PINS = document.querySelector('.map__pins');
 var AD_COUNT = 8;
 var OFFER_TYPES = ['flat', 'bungalo', 'house', 'palace'];
@@ -87,17 +88,51 @@ var renderAds = function (elem) {
   adPlace.appendChild(fragment);
 };
 
-// var closePopupHandler = function (pinCard, btnClose) {
-//   btnClose.addEventListener('click', function () {
-//     pinCard.classList.remove('map__card');
-//     console.log('test')
-//   });
-// };
+// Функция удаления карточки
+var closePopup = function () {
+  var pinCard = document.querySelector('.map__card');
+  if (pinCard) {
+    pinCard.remove();
+  }
+};
+
+// Функция закрытия попапа
+var closePopupHandler = function () {
+  var btnClose = document.querySelector('.popup__close');
+
+  btnClose.addEventListener('click', function () {
+    closePopup();
+  });
+};
+
+// Функция закрытия попапа по клавише Esc
+var closePopupEsc = function () {
+  var btnClose = document.querySelector('.popup__close');
+  btnClose.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      closePopup();
+    }
+  });
+};
+
+// Функция открытия попапа по клавише Enter
+var openPopupEnter = function () {
+  var openPin = document.querySelector('.map__pin');
+  openPin.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === ENTER_KEYCODE) {
+      closePopup();
+    }
+  });
+};
 
 // Функция вызова карточки по клику пина
 var pinClickHandler = function (pin, card) {
   pin.addEventListener('click', function () {
+    closePopup();
+    openPopupEnter();
     renderAds(card);
+    closePopupEsc();
+    closePopupHandler();
   });
 };
 
@@ -105,8 +140,6 @@ var pinClickHandler = function (pin, card) {
 var renderPins = function (array) {
   var template = document.querySelector('#pin').content.querySelector('.map__pin');
   var fragment = document.createDocumentFragment();
-  // var pinCard = document.querySelectorAll('.map__card');
-  // var btnClose = document.querySelectorAll('.popup__close');
 
   for (var i = 0; i < array.length; i++) {
     var element = template.cloneNode(true);
@@ -116,7 +149,6 @@ var renderPins = function (array) {
     pinImg.setAttribute('alt', array[i].offer.title);
     fragment.appendChild(element);
     pinClickHandler(element, array[i]); // Вызов функции pinClickHandler
-    // closePopupHandler(pinCard, btnClose);
   }
   MAP_PINS.appendChild(fragment);
 };
@@ -238,3 +270,23 @@ var changeOption = function () {
 
 roomsCount.addEventListener('change', disableAllCapacityOptions);
 roomsCount.addEventListener('change', changeOption);
+
+var timeIn = document.querySelector('#timein');
+var timeOut = document.querySelector('#timeout');
+
+// var timeInValue = parseInt(timeIn, 10);
+// var timeOutValue = parseInt(timeOut, 10);
+
+var changeTimeOption = function (valueA, valueB) {
+  if (valueA.value === valueB.value) {
+    valueB.value = valueA.value;
+    console.log('test')
+  }
+  // console.log(valueA.value)
+  // console.log(valueB.value)
+};
+
+timeIn.addEventListener('change', changeTimeOption(timeIn, timeOut));
+// timeIn.addEventListener('change', function () {
+//   changeTimeOption(timeIn, timeOut)
+// });
