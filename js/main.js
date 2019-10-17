@@ -97,7 +97,7 @@ var closePopup = function () {
 };
 
 // Функция закрытия попапа
-var closePopupHandler = function () {
+var addClosePopupHandler = function () {
   var btnClose = document.querySelector('.popup__close');
 
   btnClose.addEventListener('click', function () {
@@ -107,20 +107,10 @@ var closePopupHandler = function () {
 
 // Функция закрытия попапа по клавише Esc
 var closePopupEsc = function () {
-  var btnClose = document.querySelector('.popup__close');
-  btnClose.addEventListener('keydown', function (evt) {
+  document.addEventListener('keydown', function (evt) {
     if (evt.keyCode === ESC_KEYCODE) {
       closePopup();
-    }
-  });
-};
-
-// Функция открытия попапа по клавише Enter
-var openPopupEnter = function () {
-  var openPin = document.querySelector('.map__pin');
-  openPin.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === ENTER_KEYCODE) {
-      closePopup();
+      document.removeEventListener('keydown', closePopup);
     }
   });
 };
@@ -129,10 +119,9 @@ var openPopupEnter = function () {
 var pinClickHandler = function (pin, card) {
   pin.addEventListener('click', function () {
     closePopup();
-    openPopupEnter();
     renderAds(card);
     closePopupEsc();
-    closePopupHandler();
+    addClosePopupHandler();
   });
 };
 
