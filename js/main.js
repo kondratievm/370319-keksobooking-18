@@ -274,19 +274,23 @@ roomsCount.addEventListener('change', changeOption);
 var timeIn = document.querySelector('#timein');
 var timeOut = document.querySelector('#timeout');
 
-// var timeInValue = parseInt(timeIn, 10);
-// var timeOutValue = parseInt(timeOut, 10);
-
 var changeTimeOption = function (valueA, valueB) {
-  if (valueA.value === valueB.value) {
-    valueB.value = valueA.value;
-    console.log('test')
+  switch (true) {
+    case (valueA.value === '12:00'): valueB.value = '12:00';
+      break;
+    case (valueA.value === '13:00'): valueB.value = '13:00';
+      break;
+    case (valueA.value === '14:00'): valueB.value = '14:00';
+      break;
   }
-  // console.log(valueA.value)
-  // console.log(valueB.value)
+  return true;
 };
 
-timeIn.addEventListener('change', changeTimeOption(timeIn, timeOut));
-// timeIn.addEventListener('change', function () {
-//   changeTimeOption(timeIn, timeOut)
-// });
+timeIn.addEventListener('change', function () {
+  changeTimeOption(timeIn, timeOut);
+});
+
+timeOut.addEventListener('change', function () {
+  changeTimeOption(timeOut, timeIn);
+});
+
