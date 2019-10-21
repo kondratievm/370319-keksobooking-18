@@ -2,47 +2,34 @@
 
 // Модуль forms.js
 (function () {
-  window.sectionForm = document.querySelector('.notice');
-  window.sectionFieldset = window.sectionForm.querySelectorAll('fieldset');
+  var sectionForm = document.querySelector('.notice');
 
-  var addressInput = document.querySelector('#address');
-  var form = document.querySelector('.ad-form');
+  var sectionFieldset = sectionForm.querySelectorAll('fieldset');
+
+  // Функция деактивации формы
+  var checkDisabled = function () {
+    for (var i = 0; i < sectionFieldset.length; i++) {
+      sectionFieldset[i].setAttribute('disabled', 'disabled');
+    }
+  };
+
+  checkDisabled();
+
+  window.removeDisabled = function () {
+    for (var i = 0; i < sectionFieldset.length; i++) {
+      sectionFieldset[i].removeAttribute('disabled', 'disabled');
+    }
+  };
+
   var roomsCount = document.querySelector('#room_number');
   var placesCount = document.querySelector('#capacity');
   var placeNotForGuests = placesCount.querySelectorAll('option')[3];
   var capacityOptions = placesCount.options;
-  var timeIn = document.querySelector('#timein');
-  var timeOut = document.querySelector('#timeout');
-
-  window.forms = {
-    addressInput: addressInput,
-    form: form,
-    roomsCount: roomsCount,
-    placesCount: placesCount,
-    placeNotForGuests: placeNotForGuests,
-    capacityOptions: capacityOptions,
-    timeIn: timeIn,
-    timeOut: timeOut
-  };
-
-  // Функция деактивации формы
-  window.checkDisabled = function () {
-    for (var i = 0; i < window.sectionFieldset.length; i++) {
-      window.sectionFieldset[i].setAttribute('disabled', 'disabled');
-    }
-  };
-
-  // Функция активации формы
-  window.removeDisabled = function () {
-    for (var i = 0; i < window.sectionFieldset.length; i++) {
-      window.sectionFieldset[i].removeAttribute('disabled', 'disabled');
-    }
-  };
 
   // Функция деактивации селекта количества гостей
   var disableAllCapacityOptions = function () {
-    for (var i = 0; i < window.forms.capacityOptions.length; i++) {
-      window.forms.capacityOptions[i].setAttribute('disabled', 'disabled');
+    for (var i = 0; i < capacityOptions.length; i++) {
+      capacityOptions[i].setAttribute('disabled', 'disabled');
     }
   };
 
@@ -50,17 +37,20 @@
 
   // Функция проверки соответствия комнта и гостей
   var changeOption = function () {
-    for (var i = 0; i <= window.forms.roomsCount.value - 1; i++) {
-      if (window.forms.roomsCount.value < 100) {
-        window.forms.capacityOptions[i].removeAttribute('disabled', 'disabled');
-      } else if (window.forms.roomsCount.value === 100 || i > 3) {
-        window.forms.placeNotForGuests.removeAttribute('disabled', 'disabled');
+    for (var i = 0; i <= roomsCount.value - 1; i++) {
+      if (roomsCount.value < 100) {
+        capacityOptions[i].removeAttribute('disabled', 'disabled');
+      } else if (roomsCount.value === 100 || i > 3) {
+        placeNotForGuests.removeAttribute('disabled', 'disabled');
       }
     }
   };
 
-  window.forms.roomsCount.addEventListener('change', disableAllCapacityOptions);
-  window.forms.roomsCount.addEventListener('change', changeOption);
+  roomsCount.addEventListener('change', disableAllCapacityOptions);
+  roomsCount.addEventListener('change', changeOption);
+
+  var timeIn = document.querySelector('#timein');
+  var timeOut = document.querySelector('#timeout');
 
   var changeTimeOption = function (valueA, valueB) {
     switch (true) {
@@ -74,11 +64,11 @@
     return true;
   };
 
-  window.forms.timeIn.addEventListener('change', function () {
+  timeIn.addEventListener('change', function () {
     changeTimeOption(timeIn, timeOut);
   });
 
-  window.forms.timeOut.addEventListener('change', function () {
+  timeOut.addEventListener('change', function () {
     changeTimeOption(timeOut, timeIn);
   });
 })();

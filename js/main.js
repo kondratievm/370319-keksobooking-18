@@ -1,46 +1,42 @@
 'use strict';
 
-// Модуль main.js
-(function () {
-  var activatePin = document.querySelector('.map__pin--main');
-  var map = document.querySelector('.map');
+var activatePin = document.querySelector('.map__pin--main');
+var addressInput = document.querySelector('#address');
+var map = document.querySelector('.map');
+var form = document.querySelector('.ad-form');
 
-  window.main = {
-    activatePin: activatePin,
-    map: map
-  };
+// Функция открытия страницы
+var openPage = function () {
+  map.classList.remove('map--faded');
+};
 
-  // Функция открытия страницы
-  window.openPage = function () {
-    window.main.map.classList.remove('map--faded');
-  };
+// Функция получения координат главного пина
+var getPinCoords = function () {
+  var mainPinCoords = activatePin.getBoundingClientRect().x + ' ' + activatePin.getBoundingClientRect().y;
 
-  // Функция получения координат главного пина
-  window.getPinCoords = function () {
-    var mainPinCoords = window.main.activatePin.getBoundingClientRect().x + ' ' + window.main.activatePin.getBoundingClientRect().y;
+  addressInput.value = mainPinCoords;
+};
 
-    window.forms.addressInput.value = mainPinCoords;
-  };
+// Функция активации страницы
+var pageActivate = function () {
+  openPage();
+  form.classList.remove('ad-form--disabled');
 
-  // Функция активации страницы
-  window.pageActivate = function () {
-    window.openPage();
-    window.forms.form.classList.remove('ad-form--disabled');
+  window.renderPins(window.ads);
+  getPinCoords();
+};
 
-    window.renderPins(window.ads);
-    window.getPinCoords();
-  };
+activatePin.addEventListener('mousedown', function () {
+  pageActivate();
+  window.removeDisabled();
+});
 
-  window.main.activatePin.addEventListener('mousedown', function () {
-    window.pageActivate();
+activatePin.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === window.util.ENTER_KEYCODE) {
+    openPage();
+    pageActivate();
     window.removeDisabled();
-  });
+  }
+});
 
-  window.main.activatePin.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === window.util.ENTER_KEYCODE) {
-      window.openPage();
-      window.pageActivate();
-      window.removeDisabled();
-    }
-  });
-})();
+
