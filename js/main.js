@@ -20,13 +20,14 @@
   window.getPinCoords = function () {
 
     window.addressCoords = {
-      x: window.main.activatePin.getBoundingClientRect().x + window.main.activatePin.offsetWidth,
-      y: window.main.activatePin.getBoundingClientRect().y + window.main.activatePin.offsetHeight + pinTail
+      x: window.main.activatePin.offsetLeft + window.main.activatePin.offsetWidth,
+      y: parseInt(window.main.activatePin.style.top + window.main.activatePin.offsetHeight + pinTail, 10)
     };
 
     window.forms.addressInput.value = window.addressCoords.x + ' ' + window.addressCoords.y;
   };
 
+  // Функция движения главного пина
   activatePin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
@@ -39,31 +40,32 @@
       moveEvt.preventDefault();
       window.getPinCoords();
 
-      var mapBlockCoords = {
+      var mapBlockSize = {
         x: window.main.map.offsetWidth,
         y: window.main.map.offsetHeight
       };
-      console.log(mapBlockCoords.x);
 
       var shift = {
         x: startCoords.x - moveEvt.clientX,
         y: startCoords.y - moveEvt.clientY
       };
-      console.log(window.addressCoords.x - 100);
-      // console.log(shift.x);
 
       startCoords = {
         x: moveEvt.clientX,
         y: moveEvt.clientY
       };
 
-      if (window.addressCoords.x - 100 < mapBlockCoords.x) {
+      var nextX = activatePin.offsetLeft - shift.x + activatePin.offsetWidth / 2;
+      var nextY = activatePin.offsetTop - shift.y + activatePin.offsetHeight + pinTail;
+
+      var mapRect = map.getBoundingClientRect();
+
+      if (nextX > 0 && nextX < mapBlockSize.x && mapRect.x < moveEvt.clientX && moveEvt.clientX < mapRect.x + mapRect.width) {
         activatePin.style.left = (activatePin.offsetLeft - shift.x) + 'px';
       }
-      // if (shift.y < mapBlockCoords.y) {
+      if (nextY > 0 && nextY < mapBlockSize.y && mapRect.y < moveEvt.clientY && moveEvt.clientY < mapRect.y + mapRect.height) {
         activatePin.style.top = (activatePin.offsetTop - shift.y) + 'px';
-      // }
-
+      }
     };
 
     var onMouseUp = function (upEvt) {
