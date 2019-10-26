@@ -38,5 +38,3 @@ activatePin.addEventListener('keydown', function (evt) {
     window.removeDisabled();
   }
 });
-
-
