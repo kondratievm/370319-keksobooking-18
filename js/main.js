@@ -58,7 +58,7 @@
       if (nextX > 0 && nextX < mapRect.width && mapRect.x < moveEvt.clientX && moveEvt.clientX < mapRect.x + mapRect.width) {
         activatePin.style.left = (activatePin.offsetLeft - shift.x) + 'px';
       }
-      if (nextY > 130 && nextY < 630 && nextY < mapRect.height && mapRect.y < moveEvt.clientY && moveEvt.clientY < mapRect.y + mapRect.height - 130) {
+      if (nextY > 130 && nextY < 630 && mapRect.y + 130 < moveEvt.clientY && moveEvt.clientY < mapRect.y + 630) {
         activatePin.style.top = (activatePin.offsetTop - shift.y) + 'px';
       }
     };
