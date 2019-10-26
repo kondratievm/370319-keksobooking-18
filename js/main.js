@@ -17,11 +17,11 @@
   };
 
   // Функция получения координат главного пина
-  window.getPinCoords = function () {
+  var getPinCoords = function () {
 
     window.addressCoords = {
-      x: window.main.activatePin.offsetLeft + window.main.activatePin.offsetWidth,
-      y: parseInt(window.main.activatePin.style.top + window.main.activatePin.offsetHeight + pinTail, 10)
+      x: activatePin.offsetLeft + Math.ceil(activatePin.offsetWidth / 2),
+      y: window.main.activatePin.offsetTop + Math.ceil(window.main.activatePin.offsetHeight + pinTail)
     };
 
     window.forms.addressInput.value = window.addressCoords.x + ' ' + window.addressCoords.y;
@@ -38,12 +38,7 @@
 
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
-      window.getPinCoords();
-
-      var mapBlockSize = {
-        x: window.main.map.offsetWidth,
-        y: window.main.map.offsetHeight
-      };
+      getPinCoords();
 
       var shift = {
         x: startCoords.x - moveEvt.clientX,
@@ -60,10 +55,10 @@
 
       var mapRect = map.getBoundingClientRect();
 
-      if (nextX > 0 && nextX < mapBlockSize.x && mapRect.x < moveEvt.clientX && moveEvt.clientX < mapRect.x + mapRect.width) {
+      if (nextX > 0 && nextX < mapRect.width && mapRect.x < moveEvt.clientX && moveEvt.clientX < mapRect.x + mapRect.width) {
         activatePin.style.left = (activatePin.offsetLeft - shift.x) + 'px';
       }
-      if (nextY > 0 && nextY < mapBlockSize.y && mapRect.y < moveEvt.clientY && moveEvt.clientY < mapRect.y + mapRect.height) {
+      if (nextY > 130 && nextY < 630 && nextY < mapRect.height && mapRect.y < moveEvt.clientY && moveEvt.clientY < mapRect.y + mapRect.height - 130) {
         activatePin.style.top = (activatePin.offsetTop - shift.y) + 'px';
       }
     };
@@ -87,11 +82,11 @@
     window.forms.form.classList.remove('ad-form--disabled');
 
     window.renderPins(window.ads);
-    window.getPinCoords();
+    getPinCoords();
   };
 
   window.main.activatePin.addEventListener('mousedown', function () {
-    window.getPinCoords();
+    getPinCoords();
 
     if (!pinActive) {
       window.pageActivate();
