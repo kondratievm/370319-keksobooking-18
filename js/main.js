@@ -79,6 +79,8 @@
     document.addEventListener('mouseup', onMouseUp);
   });
 
+  var pinActive = false;
+
   // Функция активации страницы
   window.pageActivate = function () {
     window.openPage();
@@ -90,5 +92,20 @@
 
   window.main.activatePin.addEventListener('mousedown', function () {
     window.getPinCoords();
+
+    if (!pinActive) {
+      window.pageActivate();
+      pinActive = true;
+    }
+
+    window.removeDisabled();
+  });
+
+  window.main.activatePin.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === window.util.ENTER_KEYCODE) {
+      window.openPage();
+      window.pageActivate();
+      window.removeDisabled();
+    }
   });
 })();
