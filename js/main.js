@@ -93,7 +93,6 @@
   window.main.activatePin.addEventListener('mousedown', function () {
     window.getPinCoords();
 
-
     if (!pinActive) {
       window.pageActivate();
       pinActive = true;
@@ -101,4 +100,4 @@
 
     window.removeDisabled();
   });
-
+})();
