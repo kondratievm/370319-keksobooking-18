@@ -1,106 +1,40 @@
 'use strict';
 
-// Модуль main.js
-(function () {
-  var activatePin = document.querySelector('.map__pin--main');
-  var map = document.querySelector('.map');
-  var pinTail = parseInt(window.getComputedStyle(document.querySelector('.map__pin--main'), ':after').height, 10);
+var activatePin = document.querySelector('.map__pin--main');
+var addressInput = document.querySelector('#address');
+var map = document.querySelector('.map');
+var form = document.querySelector('.ad-form');
 
-  window.main = {
-    activatePin: activatePin,
-    map: map
-  };
+// Функция открытия страницы
+var openPage = function () {
+  map.classList.remove('map--faded');
+};
 
-  // Функция открытия страницы
-  window.openPage = function () {
-    window.main.map.classList.remove('map--faded');
-  };
+// Функция получения координат главного пина
+var getPinCoords = function () {
+  var mainPinCoords = activatePin.getBoundingClientRect().x + ' ' + activatePin.getBoundingClientRect().y;
 
-  // Функция получения координат главного пина
-  var getPinCoords = function () {
+  addressInput.value = mainPinCoords;
+};
 
-    window.addressCoords = {
-      x: activatePin.offsetLeft + Math.ceil(activatePin.offsetWidth / 2),
-      y: window.main.activatePin.offsetTop + Math.ceil(window.main.activatePin.offsetHeight + pinTail)
-    };
+// Функция активации страницы
+var pageActivate = function () {
+  openPage();
+  form.classList.remove('ad-form--disabled');
 
-    window.forms.addressInput.value = window.addressCoords.x + ' ' + window.addressCoords.y;
-  };
+  window.renderPins(window.ads);
+  getPinCoords();
+};
 
-  // Функция движения главного пина
-  activatePin.addEventListener('mousedown', function (evt) {
-    evt.preventDefault();
+activatePin.addEventListener('mousedown', function () {
+  pageActivate();
+  window.removeDisabled();
+});
 
-    var startCoords = {
-      x: evt.clientX,
-      y: evt.clientY
-    };
-
-    var onMouseMove = function (moveEvt) {
-      moveEvt.preventDefault();
-      getPinCoords();
-
-      var shift = {
-        x: startCoords.x - moveEvt.clientX,
-        y: startCoords.y - moveEvt.clientY
-      };
-
-      startCoords = {
-        x: moveEvt.clientX,
-        y: moveEvt.clientY
-      };
-
-      var nextX = activatePin.offsetLeft - shift.x + activatePin.offsetWidth / 2;
-      var nextY = activatePin.offsetTop - shift.y + activatePin.offsetHeight + pinTail;
-
-      var mapRect = map.getBoundingClientRect();
-
-      if (nextX > 0 && nextX < mapRect.width && mapRect.x < moveEvt.clientX && moveEvt.clientX < mapRect.x + mapRect.width) {
-        activatePin.style.left = (activatePin.offsetLeft - shift.x) + 'px';
-      }
-      if (nextY > 130 && nextY < 630 && mapRect.y + 130 < moveEvt.clientY && moveEvt.clientY < mapRect.y + 630) {
-        activatePin.style.top = (activatePin.offsetTop - shift.y) + 'px';
-      }
-    };
-
-    var onMouseUp = function (upEvt) {
-      upEvt.preventDefault();
-
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-    };
-
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-  });
-
-  var pinActive = false;
-
-  // Функция активации страницы
-  window.pageActivate = function () {
-    window.openPage();
-    window.forms.form.classList.remove('ad-form--disabled');
-
-    window.renderPins(window.ads);
-    getPinCoords();
-  };
-
-  window.main.activatePin.addEventListener('mousedown', function () {
-    getPinCoords();
-
-    if (!pinActive) {
-      window.pageActivate();
-      pinActive = true;
-    }
-
+activatePin.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === window.util.ENTER_KEYCODE) {
+    openPage();
+    pageActivate();
     window.removeDisabled();
-  });
-
-  window.main.activatePin.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === window.util.ENTER_KEYCODE) {
-      window.openPage();
-      window.pageActivate();
-      window.removeDisabled();
-    }
-  });
-})();
+  }
+});
