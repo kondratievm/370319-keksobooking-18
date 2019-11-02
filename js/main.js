@@ -76,12 +76,24 @@
 
   var pinActive = false;
 
+  var onError = function (message) {
+    console.error(message);
+  };
+
+  var onSuccess = function (data) {
+    console.log(data);
+    window.ads = data;
+    window.renderPins(window.ads);
+  };
+
   // Функция активации страницы
   window.pageActivate = function () {
     window.openPage();
     window.forms.form.classList.remove('ad-form--disabled');
 
-    window.renderPins(window.ads);
+    // window.renderPins(window.ads);
+    window.load('https://js.dump.academy/keksobooking/data', onSuccess, onError);
+
     getPinCoords();
   };
 
