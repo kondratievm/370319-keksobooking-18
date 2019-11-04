@@ -26,6 +26,5 @@
 
     xhr.open('GET', url);
     xhr.send();
-    console.log('test');
   };
 })();

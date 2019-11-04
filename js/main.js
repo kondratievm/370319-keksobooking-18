@@ -76,17 +76,22 @@
 
   var pinActive = false;
 
-  var onError = function (message) {
-    console.error(message);
-    var node = document.createElement('div');
-    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
-    node.style.position = 'absolute';
-    node.style.left = 0;
-    node.style.right = 0;
-    node.style.fontSize = '30px';
+  var onError = function () {
+    var errorPlace = document.querySelector('main');
+    var errorTemplate = document.querySelector('#error').content.querySelector('.error');
+    var fragment = document.createDocumentFragment();
+    var element = errorTemplate.cloneNode(true);
+    fragment.appendChild(element);
+    errorPlace.appendChild(fragment);
 
-    node.textContent = message;
-    document.body.insertAdjacentElement('afterbegin', node);
+    var errorMessage = document.querySelector('.error');
+    var reloadBtn = document.querySelector('.error__button');
+
+    reloadBtn.addEventListener('click', function (evt) {
+      evt.preventDefault();
+      errorMessage.remove();
+      window.pageActivate();
+    });
   };
 
   var popupTitle = document.querySelector('.popup__title');
@@ -102,7 +107,6 @@
   var popupBlocks = [popupTitle, popupAddress, popupPrice, popupType, popupCapacity, popupTime, popupFeatures, popupDescription, popupPhotos];
 
   var onSuccess = function (data) {
-    console.log(data);
     window.ads = data;
     window.renderPins(window.ads);
 
@@ -118,7 +122,6 @@
     window.openPage();
     window.forms.form.classList.remove('ad-form--disabled');
 
-    // window.renderPins(window.ads);
     window.load('https://js.dump.academy/keksobooking/data', onSuccess, onError);
 
     getPinCoords();
