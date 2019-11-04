@@ -76,12 +76,54 @@
 
   var pinActive = false;
 
+  var onError = function () {
+    var errorPlace = document.querySelector('main');
+    var errorTemplate = document.querySelector('#error').content.querySelector('.error');
+    var fragment = document.createDocumentFragment();
+    var element = errorTemplate.cloneNode(true);
+    fragment.appendChild(element);
+    errorPlace.appendChild(fragment);
+
+    var errorMessage = document.querySelector('.error');
+    var reloadBtn = document.querySelector('.error__button');
+
+    reloadBtn.addEventListener('click', function (evt) {
+      evt.preventDefault();
+      errorMessage.remove();
+      window.pageActivate();
+    });
+  };
+
+  var popupTitle = document.querySelector('.popup__title');
+  var popupAddress = document.querySelector('.popup__text--address');
+  var popupPrice = document.querySelector('.popup__text--price');
+  var popupType = document.querySelector('.popup__type');
+  var popupCapacity = document.querySelector('.popup__text--capacity');
+  var popupTime = document.querySelector('.popup__text--time');
+  var popupFeatures = document.querySelector('.popup__features');
+  var popupDescription = document.querySelector('.popup__description');
+  var popupPhotos = document.querySelector('.popup__photos');
+
+  var popupBlocks = [popupTitle, popupAddress, popupPrice, popupType, popupCapacity, popupTime, popupFeatures, popupDescription, popupPhotos];
+
+  var onSuccess = function (data) {
+    window.ads = data;
+    window.renderPins(window.ads);
+
+    for (var i = 0; i < popupBlocks.length; i++) {
+      if (popupBlocks[i] === undefined) {
+        popupBlocks[i].setAttribute('hidden', 'hidden');
+      }
+    }
+  };
+
   // Функция активации страницы
   window.pageActivate = function () {
     window.openPage();
     window.forms.form.classList.remove('ad-form--disabled');
 
-    window.renderPins(window.ads);
+    window.load('https://js.dump.academy/keksobooking/data', onSuccess, onError);
+
     getPinCoords();
   };
 

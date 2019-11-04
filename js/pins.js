@@ -2,10 +2,20 @@
 
 // Модуль pins.js
 (function () {
-  var MAP_PINS = document.querySelector('.map__pins');
+  window.MAP_PINS = document.querySelector('.map__pins');
+
+  // Функция открытия попапа по клавише Enter
+  window.openPopupEnter = function () {
+    var openPin = document.querySelector('.map__pin');
+    openPin.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === window.util.ENTER_KEYCODE) {
+        window.closePopup();
+      }
+    });
+  };
 
   // Функция вызова карточки по клику пина
-  var pinClickHandler = function (pin, card) {
+  window.pinClickHandler = function (pin, card) {
     pin.addEventListener('click', function () {
       window.closePopup();
       window.openPopupEnter();
@@ -27,8 +37,8 @@
       pinImg.setAttribute('src', array[i].author.avatar);
       pinImg.setAttribute('alt', array[i].offer.title);
       fragment.appendChild(element);
-      pinClickHandler(element, array[i]); // Вызов функции pinClickHandler
+      window.pinClickHandler(element, array[i]); // Вызов функции pinClickHandler
     }
-    MAP_PINS.appendChild(fragment);
+    window.MAP_PINS.appendChild(fragment);
   };
 })();
