@@ -2,10 +2,20 @@
 
 // Модуль cards.js
 (function () {
-  var OFFER_PHOTOS = window.createPhotoArr(1, 3);
+  // Функция отрисовки фотографий
+  window.renderPhotos = function (adPhoto, element) {
+    var photoList = adPhoto.querySelector('.popup__photos');
+    var photoTemplate = photoList.querySelector('.popup__photo');
+    var photoElement = photoList.querySelector('.popup__photo');
+    photoList.innerHTML = '';
+    var ad = element;
 
-  window.cards = {
-    OFFER_PHOTOS: OFFER_PHOTOS
+    for (var i = 0; i < ad.offer.photos.length; i++) {
+      photoElement = photoTemplate.cloneNode(true);
+      photoElement.setAttribute('src', ad.offer.photos[i]);
+      photoList.appendChild(photoElement);
+    }
+    adPhoto.appendChild(photoList);
   };
 
   // Функция наполнения карточки данными из объекта
@@ -19,7 +29,7 @@
     adElement.querySelector('.popup__text--time').textContent = 'заезд после ' + element.offer.checkin + ', выезд до ' + element.offer.checkout;
     adElement.querySelector('.popup__features').textContent = element.offer.features;
     adElement.querySelector('.popup__description').textContent = element.offer.description;
-    window.renderPhotos(adElement);
+    window.renderPhotos(adElement, element);
   };
 
   // Рендер карточки
