@@ -8,11 +8,10 @@
     var photoTemplate = photoList.querySelector('.popup__photo');
     var photoElement = photoList.querySelector('.popup__photo');
     photoList.innerHTML = '';
-    var ad = element;
 
-    for (var i = 0; i < ad.offer.photos.length; i++) {
+    for (var i = 0; i < element.offer.photos.length; i++) {
       photoElement = photoTemplate.cloneNode(true);
-      photoElement.setAttribute('src', ad.offer.photos[i]);
+      photoElement.setAttribute('src', element.offer.photos[i]);
       photoList.appendChild(photoElement);
     }
     adPhoto.appendChild(photoList);
