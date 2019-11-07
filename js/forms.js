@@ -46,7 +46,7 @@
     }
   };
 
-  disableAllCapacityOptions();
+  // disableAllCapacityOptions();
 
   // Функция проверки соответствия комнат и гостей
   var changeOption = function () {
