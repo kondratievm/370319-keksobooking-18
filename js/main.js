@@ -75,7 +75,7 @@
   });
 
   var pinActive = false;
-  var reloadBtn = document.querySelector('.error__button');
+  var reloadButton = document.querySelector('.error__button');
 
   var onError = function () {
     var errorPlace = document.querySelector('main');
@@ -91,10 +91,10 @@
       evt.preventDefault();
       errorMessage.remove();
       window.pageActivate();
-      reloadBtn.removeEventListener('click', window.reloadButtonHandler);
+      reloadButton.removeEventListener('click', window.reloadButtonHandler);
     };
 
-    reloadBtn.addEventListener('click', window.reloadButtonHandler);
+    reloadButton.addEventListener('click', window.reloadButtonHandler);
   };
 
   var popupContent = document.querySelector('.map__card');

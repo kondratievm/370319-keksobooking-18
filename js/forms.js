@@ -48,7 +48,7 @@
 
   disableAllCapacityOptions();
 
-  // Функция проверки соответствия комнта и гостей
+  // Функция проверки соответствия комнат и гостей
   var changeOption = function () {
     for (var i = 0; i <= window.forms.roomsCount.value - 1; i++) {
       if (window.forms.roomsCount.value < 100) {
@@ -81,4 +81,19 @@
   window.forms.timeOut.addEventListener('change', function () {
     changeTimeOption(timeOut, timeIn);
   });
+
+  form.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.upload(new FormData(form), onSuccess, onError);
+  });
+
+  var onSuccess = function () {
+    // window.forms.form.classList.add('ad-form--disabled');
+    console.log('success');
+  };
+
+  var onError = function (x) {
+    console.log(x);
+  };
+
 })();
