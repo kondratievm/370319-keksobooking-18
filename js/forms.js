@@ -13,6 +13,8 @@
   var capacityOptions = placesCount.options;
   var timeIn = document.querySelector('#timein');
   var timeOut = document.querySelector('#timeout');
+  var type = document.querySelector('#type');
+  var price = document.querySelector('#price');
 
   window.forms = {
     addressInput: addressInput,
@@ -22,7 +24,9 @@
     placeNotForGuests: placeNotForGuests,
     capacityOptions: capacityOptions,
     timeIn: timeIn,
-    timeOut: timeOut
+    timeOut: timeOut,
+    type: type,
+    price: price
   };
 
   // Функция деактивации формы
@@ -60,13 +64,13 @@
   window.forms.roomsCount.addEventListener('change', disableAllCapacityOptions);
   window.forms.roomsCount.addEventListener('change', changeOption);
 
-  var changeTimeOption = function (valueA, valueB) {
+  var changeTimeOption = function (timeBefore, timeAfter) {
     switch (true) {
-      case (valueA.value === '12:00'): valueB.value = '12:00';
+      case (timeBefore.value === '12:00'): timeAfter.value = '12:00';
         break;
-      case (valueA.value === '13:00'): valueB.value = '13:00';
+      case (timeBefore.value === '13:00'): timeAfter.value = '13:00';
         break;
-      case (valueA.value === '14:00'): valueB.value = '14:00';
+      case (timeBefore.value === '14:00'): timeAfter.value = '14:00';
         break;
     }
     return true;
@@ -78,6 +82,37 @@
 
   window.forms.timeOut.addEventListener('change', function () {
     changeTimeOption(timeOut, timeIn);
+  });
+
+  // Функция изменения цены
+  var changePrice = function (typeValue, priceValue) {
+    switch (true) {
+      case (typeValue.value === 'bungalo'):
+        priceValue.value = '0';
+        priceValue.setAttribute('min', 0);
+        break;
+      case (typeValue.value === 'flat'):
+        priceValue.value = '1000';
+        priceValue.setAttribute('min', 1000);
+        break;
+      case (typeValue.value === 'house'):
+        priceValue.value = '5000';
+        priceValue.setAttribute('min', 5000);
+        break;
+      case (typeValue.value === 'palace'):
+        priceValue.value = '10000';
+        priceValue.setAttribute('min', 10000);
+        break;
+    }
+    return true;
+  };
+
+  window.forms.type.addEventListener('change', function () {
+    changePrice(type, price);
+  });
+
+  window.forms.price.addEventListener('change', function () {
+    changePrice(price, type);
   });
 
   form.addEventListener('submit', function (evt) {
