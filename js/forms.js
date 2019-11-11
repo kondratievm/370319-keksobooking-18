@@ -25,8 +25,6 @@
     capacityOptions: capacityOptions,
     timeIn: timeIn,
     timeOut: timeOut,
-    type: type,
-    price: price
   };
 
   // Функция деактивации формы
@@ -66,11 +64,11 @@
 
   var changeTimeOption = function (timeBefore, timeAfter) {
     switch (true) {
-      case (timeBefore.value === '12:00'): timeAfter.value = '12:00';
+      case (timeBefore.value === '12:00'): timeAfter.value = timeBefore.value;
         break;
-      case (timeBefore.value === '13:00'): timeAfter.value = '13:00';
+      case (timeBefore.value === '13:00'): timeAfter.value = timeBefore.value;
         break;
-      case (timeBefore.value === '14:00'): timeAfter.value = '14:00';
+      case (timeBefore.value === '14:00'): timeAfter.value = timeBefore.value;
         break;
     }
     return true;
@@ -86,20 +84,20 @@
 
   // Функция изменения цены
   var changePrice = function (typeValue, priceValue) {
-    switch (true) {
-      case (typeValue.value === 'bungalo'):
+    switch (typeValue.value) {
+      case ('bungalo'):
         priceValue.value = '0';
         priceValue.setAttribute('min', 0);
         break;
-      case (typeValue.value === 'flat'):
+      case ('flat'):
         priceValue.value = '1000';
         priceValue.setAttribute('min', 1000);
         break;
-      case (typeValue.value === 'house'):
+      case ('house'):
         priceValue.value = '5000';
         priceValue.setAttribute('min', 5000);
         break;
-      case (typeValue.value === 'palace'):
+      case ('palace'):
         priceValue.value = '10000';
         priceValue.setAttribute('min', 10000);
         break;
@@ -107,11 +105,11 @@
     return true;
   };
 
-  window.forms.type.addEventListener('change', function () {
+  type.addEventListener('change', function () {
     changePrice(type, price);
   });
 
-  window.forms.price.addEventListener('change', function () {
+  price.addEventListener('change', function () {
     changePrice(price, type);
   });
 
