@@ -100,7 +100,8 @@
 
     window.main.map.classList.add('map--faded');
     window.closePopup();
-    window.getPinCoords();
+
+    window.pinActive = false;
 
     var successPlace = document.querySelector('main');
     var successTemplate = document.querySelector('#success').content.querySelector('.success');
