@@ -39,9 +39,9 @@
 
   // Функция закрытия попапа
   window.closePopupHandler = function () {
-    var btnClose = document.querySelector('.popup__close');
+    var buttonClose = document.querySelector('.popup__close');
 
-    btnClose.addEventListener('click', function () {
+    buttonClose.addEventListener('click', function () {
       window.closePopup();
     });
   };

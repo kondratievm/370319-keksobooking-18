@@ -63,15 +63,7 @@
   window.forms.roomsCount.addEventListener('change', changeOption);
 
   var changeTimeOption = function (timeBefore, timeAfter) {
-    switch (true) {
-      case (timeBefore.value === '12:00'): timeAfter.value = timeBefore.value;
-        break;
-      case (timeBefore.value === '13:00'): timeAfter.value = timeBefore.value;
-        break;
-      case (timeBefore.value === '14:00'): timeAfter.value = timeBefore.value;
-        break;
-    }
-    return true;
+    timeAfter.value = timeBefore.value;
   };
 
   window.forms.timeIn.addEventListener('change', function () {
@@ -102,7 +94,6 @@
         priceValue.setAttribute('min', 10000);
         break;
     }
-    return true;
   };
 
   type.addEventListener('change', function () {
@@ -116,6 +107,13 @@
   form.addEventListener('submit', function (evt) {
     evt.preventDefault();
     window.upload(new FormData(form), onSuccess, onError);
+  });
+
+  var buttonReset = document.querySelector('.ad-form__reset');
+
+  // Фуекция сброса формы
+  buttonReset.addEventListener('click', function () {
+    window.forms.form.reset();
   });
 
   var onSuccess = function () {
