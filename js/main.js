@@ -74,7 +74,7 @@
     document.addEventListener('mouseup', onMouseUp);
   });
 
-  var pinActive = false;
+  window.pinActive = false;
 
   window.errorMessageShowing = function () {
     var errorPlace = document.querySelector('main');
@@ -127,9 +127,9 @@
   window.main.activatePin.addEventListener('mousedown', function () {
     window.getPinCoords();
 
-    if (!pinActive) {
+    if (!window.pinActive) {
       window.pageActivate();
-      pinActive = true;
+      window.pinActive = true;
     }
 
     window.removeDisabled();

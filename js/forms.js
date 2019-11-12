@@ -13,6 +13,8 @@
   var capacityOptions = placesCount.options;
   var timeIn = document.querySelector('#timein');
   var timeOut = document.querySelector('#timeout');
+  var type = document.querySelector('#type');
+  var price = document.querySelector('#price');
 
   window.forms = {
     addressInput: addressInput,
@@ -22,7 +24,7 @@
     placeNotForGuests: placeNotForGuests,
     capacityOptions: capacityOptions,
     timeIn: timeIn,
-    timeOut: timeOut
+    timeOut: timeOut,
   };
 
   // Функция деактивации формы
@@ -60,16 +62,8 @@
   window.forms.roomsCount.addEventListener('change', disableAllCapacityOptions);
   window.forms.roomsCount.addEventListener('change', changeOption);
 
-  var changeTimeOption = function (valueA, valueB) {
-    switch (true) {
-      case (valueA.value === '12:00'): valueB.value = '12:00';
-        break;
-      case (valueA.value === '13:00'): valueB.value = '13:00';
-        break;
-      case (valueA.value === '14:00'): valueB.value = '14:00';
-        break;
-    }
-    return true;
+  var changeTimeOption = function (timeBefore, timeAfter) {
+    timeAfter.value = timeBefore.value;
   };
 
   window.forms.timeIn.addEventListener('change', function () {
@@ -80,9 +74,46 @@
     changeTimeOption(timeOut, timeIn);
   });
 
+  // Функция изменения цены
+  var changePrice = function (typeValue, priceValue) {
+    switch (typeValue.value) {
+      case ('bungalo'):
+        priceValue.value = '0';
+        priceValue.setAttribute('min', 0);
+        break;
+      case ('flat'):
+        priceValue.value = '1000';
+        priceValue.setAttribute('min', 1000);
+        break;
+      case ('house'):
+        priceValue.value = '5000';
+        priceValue.setAttribute('min', 5000);
+        break;
+      case ('palace'):
+        priceValue.value = '10000';
+        priceValue.setAttribute('min', 10000);
+        break;
+    }
+  };
+
+  type.addEventListener('change', function () {
+    changePrice(type, price);
+  });
+
+  price.addEventListener('change', function () {
+    changePrice(price, type);
+  });
+
   form.addEventListener('submit', function (evt) {
     evt.preventDefault();
     window.upload(new FormData(form), onSuccess, onError);
+  });
+
+  var buttonReset = document.querySelector('.ad-form__reset');
+
+  // Фуекция сброса формы
+  buttonReset.addEventListener('click', function () {
+    window.forms.form.reset();
   });
 
   var onSuccess = function () {
@@ -100,7 +131,8 @@
 
     window.main.map.classList.add('map--faded');
     window.closePopup();
-    window.getPinCoords();
+
+    window.pinActive = false;
 
     var successPlace = document.querySelector('main');
     var successTemplate = document.querySelector('#success').content.querySelector('.success');
