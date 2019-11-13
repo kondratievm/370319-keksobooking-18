@@ -26,19 +26,22 @@
   };
 
   // Функция отрисовки пинов
-  window.renderPins = function (array) {
+
+  window.renderPins = function (data) {
     var template = document.querySelector('#pin').content.querySelector('.map__pin');
     var fragment = document.createDocumentFragment();
+    var takeNumber = data.length > 5 ? 5 : data.length;
 
-    for (var i = 0; i < array.length; i++) {
+    for (var i = 0; i < takeNumber; i++) {
       var element = template.cloneNode(true);
-      element.setAttribute('style', 'left: ' + array[i].location.x + 'px; top: ' + array[i].location.y + 'px;');
+      element.setAttribute('style', 'left: ' + data[i].location.x + 'px; top: ' + data[i].location.y + 'px;');
       var pinImg = element.querySelector('img');
-      pinImg.setAttribute('src', array[i].author.avatar);
-      pinImg.setAttribute('alt', array[i].offer.title);
+      pinImg.setAttribute('src', data[i].author.avatar);
+      pinImg.setAttribute('alt', data[i].offer.title);
       fragment.appendChild(element);
-      window.pinClickHandler(element, array[i]); // Вызов функции pinClickHandler
+      window.pinClickHandler(element, data[i]); // Вызов функции pinClickHandler
     }
     window.MAP_PINS.appendChild(fragment);
   };
+
 })();

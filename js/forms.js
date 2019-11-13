@@ -111,7 +111,7 @@
 
   var buttonReset = document.querySelector('.ad-form__reset');
 
-  // Фуекция сброса формы
+  // Функция сброса формы
   buttonReset.addEventListener('click', function () {
     window.forms.form.reset();
   });
@@ -174,7 +174,5 @@
     document.addEventListener('click', function () {
       window.element.remove();
     });
-
   };
-
 })();
