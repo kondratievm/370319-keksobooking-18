@@ -105,6 +105,7 @@
 
   var onSuccess = function (data) {
     window.ads = data;
+
     window.renderPins(window.ads);
 
     window.pins = document.querySelectorAll('.map__pin');
