@@ -2,10 +2,10 @@
 
 // Модуль pins.js
 (function () {
-  window.MAP_PINS = document.querySelector('.map__pins');
+  var mapPins = document.querySelector('.map__pins');
 
   // Функция открытия попапа по клавише Enter
-  window.openPopupEnter = function () {
+  var openPopupEnter = function () {
     var openPin = document.querySelector('.map__pin');
     openPin.addEventListener('keydown', function (evt) {
       if (evt.keyCode === window.util.ENTER_KEYCODE) {
@@ -15,18 +15,18 @@
   };
 
   // Функция вызова карточки по клику пина
-  window.pinClickHandler = function (pin, card) {
+  var pinClickHandler = function (pin, card) {
     pin.addEventListener('click', function () {
       window.closePopup();
-      window.openPopupEnter();
+      openPopupEnter();
       window.renderAds(card);
       window.closePopupEsc();
       window.closePopupHandler();
+      pin.classList.add('map__pin--active');
     });
   };
 
   // Функция отрисовки пинов
-
   window.renderPins = function (data) {
     var template = document.querySelector('#pin').content.querySelector('.map__pin');
     var fragment = document.createDocumentFragment();
@@ -35,13 +35,12 @@
     for (var i = 0; i < takeNumber; i++) {
       var element = template.cloneNode(true);
       element.setAttribute('style', 'left: ' + data[i].location.x + 'px; top: ' + data[i].location.y + 'px;');
-      var pinImg = element.querySelector('img');
-      pinImg.setAttribute('src', data[i].author.avatar);
-      pinImg.setAttribute('alt', data[i].offer.title);
+      var pinImage = element.querySelector('img');
+      pinImage.setAttribute('src', data[i].author.avatar);
+      pinImage.setAttribute('alt', data[i].offer.title);
       fragment.appendChild(element);
-      window.pinClickHandler(element, data[i]); // Вызов функции pinClickHandler
+      pinClickHandler(element, data[i]); // Вызов функции pinClickHandler
     }
-    window.MAP_PINS.appendChild(fragment);
+    mapPins.appendChild(fragment);
   };
-
 })();

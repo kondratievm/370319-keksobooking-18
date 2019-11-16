@@ -26,19 +26,19 @@
     adElement.querySelector('.popup__type').textContent = window.offerTranslatter(element.offer.type);
     adElement.querySelector('.popup__text--capacity').textContent = element.offer.rooms + ' комнаты для ' + element.offer.guests + ' гостей';
     adElement.querySelector('.popup__text--time').textContent = 'заезд после ' + element.offer.checkin + ', выезд до ' + element.offer.checkout;
-    adElement.querySelector('.popup__features').textContent = element.offer.features;
+    adElement.querySelector('.popup__features').src = element.offer.features;
     adElement.querySelector('.popup__description').textContent = element.offer.description;
     window.renderPhotos(adElement, element);
   };
 
   // Рендер карточки
-  window.renderAds = function (elem) {
+  window.renderAds = function (element) {
     var adPlace = document.querySelector('.map__filters-container');
     var template = document.querySelector('#card').content.querySelector('.map__card');
     var fragment = document.createDocumentFragment();
-    var element = template.cloneNode(true);
-    window.renderAd(element, elem);
-    fragment.appendChild(element);
+    var ad = template.cloneNode(true);
+    window.renderAd(ad, element);
+    fragment.appendChild(ad);
 
     adPlace.appendChild(fragment);
   };

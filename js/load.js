@@ -1,6 +1,9 @@
 'use strict';
 
 (function () {
+  var TIME_OUT = 10000;
+
+  // Функция загрузки
   window.load = function (url, onSuccess, onError) {
     var xhr = new XMLHttpRequest();
 
@@ -22,12 +25,13 @@
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
-    xhr.timeout = 10000; // 10s
+    xhr.timeout = TIME_OUT; // 10s
 
     xhr.open('GET', url);
     xhr.send();
   };
 
+  // Функция отправки
   window.upload = function (data, onSuccess, onError) {
     var url = 'https://js.dump.academy/keksobooking';
     var xhr = new XMLHttpRequest();
@@ -45,5 +49,4 @@
     xhr.open('POST', url);
     xhr.send(data);
   };
-
 })();

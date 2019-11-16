@@ -4,6 +4,7 @@
 (function () {
   var ESC_KEYCODE = 27;
   var ENTER_KEYCODE = 13;
+  window.pin = document.querySelector('.pin');
 
   window.util = {
     ESC_KEYCODE: ESC_KEYCODE,
@@ -43,7 +44,17 @@
 
     buttonClose.addEventListener('click', function () {
       window.closePopup();
+      window.removedActiveClass();
     });
+  };
+
+  // Функция удвления класса активного пина
+  window.removedActiveClass = function () {
+    for (var i = 0; i < window.pins.length; i++) {
+      if (window.pins[i].classList.contains('map__pin--active')) {
+        window.pins[i].classList.remove('map__pin--active');
+      }
+    }
   };
 
   // Функция закрытия попапа по клавише Esc
@@ -52,6 +63,7 @@
       if (evt.keyCode === window.util.ESC_KEYCODE) {
         window.closePopup();
       }
+      window.removedActiveClass();
     });
   };
 })();

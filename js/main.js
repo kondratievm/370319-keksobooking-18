@@ -7,21 +7,20 @@
   var pinTail = parseInt(window.getComputedStyle(document.querySelector('.map__pin--main'), ':after').height, 10);
 
   window.main = {
-    activatePin: window.activatePin,
     map: map
   };
 
   // Функция открытия страницы
-  window.openPage = function () {
+  var openPage = function () {
     window.main.map.classList.remove('map--faded');
   };
 
   // Функция получения координат главного пина
-  window.getPinCoords = function () {
+  var getPinCoords = function () {
 
     window.addressCoords = {
       x: window.activatePin.offsetLeft + Math.ceil(window.activatePin.offsetWidth / 2),
-      y: window.main.activatePin.offsetTop + Math.ceil(window.main.activatePin.offsetHeight + pinTail)
+      y: window.activatePin.offsetTop + Math.ceil(window.activatePin.offsetHeight + pinTail)
     };
 
     window.forms.addressInput.value = window.addressCoords.x + ' ' + window.addressCoords.y;
@@ -38,7 +37,7 @@
 
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
-      window.getPinCoords();
+      getPinCoords();
 
       var shift = {
         x: startCoords.x - moveEvt.clientX,
@@ -94,7 +93,7 @@
     window.reloadButtonHandler = function (evt) {
       evt.preventDefault();
       window.errorMessage.remove();
-      window.pageActivate();
+      pageActivate();
       window.reloadButton.removeEventListener('click', window.reloadButtonHandler);
     };
 
@@ -116,32 +115,33 @@
   };
 
   // Функция активации страницы
-  window.pageActivate = function () {
-    window.openPage();
+  var pageActivate = function () {
+    openPage();
     window.forms.form.classList.remove('ad-form--disabled');
 
     window.load('https://js.dump.academy/keksobooking/data', onSuccess, onError);
 
-    window.getPinCoords();
+    getPinCoords();
   };
 
-  window.main.activatePin.addEventListener('mousedown', function () {
-    window.getPinCoords();
+  window.activatePin.addEventListener('mousedown', function () {
+    getPinCoords();
 
     if (!window.pinActive) {
-      window.pageActivate();
+      pageActivate();
       window.pinActive = true;
     }
 
     window.removeDisabled();
+    window.removeDisabledFiltres();
+    window.removeDisabledFiltrCheckboxes();
   });
 
-  window.main.activatePin.addEventListener('keydown', function (evt) {
+  window.activatePin.addEventListener('keydown', function (evt) {
     if (evt.keyCode === window.util.ENTER_KEYCODE) {
-      window.openPage();
-      window.pageActivate();
+      openPage();
+      pageActivate();
       window.removeDisabled();
     }
   });
 })();
-

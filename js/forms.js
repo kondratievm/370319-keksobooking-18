@@ -2,9 +2,10 @@
 
 // Модуль forms.js
 (function () {
-  window.sectionForm = document.querySelector('.notice');
-  window.sectionFieldset = window.sectionForm.querySelectorAll('fieldset');
-
+  var sectionForm = document.querySelector('.notice');
+  var sectionFieldset = sectionForm.querySelectorAll('fieldset');
+  var mapFiltres = document.querySelectorAll('.map__filter');
+  var mapFiltresCheckboxs = document.querySelectorAll('.map__checkbox');
   var addressInput = document.querySelector('#address');
   var form = document.querySelector('.ad-form');
   var roomsCount = document.querySelector('#room_number');
@@ -19,58 +20,87 @@
   window.forms = {
     addressInput: addressInput,
     form: form,
-    roomsCount: roomsCount,
     placesCount: placesCount,
-    placeNotForGuests: placeNotForGuests,
-    capacityOptions: capacityOptions,
-    timeIn: timeIn,
-    timeOut: timeOut,
   };
 
-  // Функция деактивации формы
-  window.checkDisabled = function () {
-    for (var i = 0; i < window.sectionFieldset.length; i++) {
-      window.sectionFieldset[i].setAttribute('disabled', 'disabled');
+  // Функция деактивации фильтров
+  var checkDisabledFiltres = function () {
+    for (var i = 0; i < mapFiltres.length; i++) {
+      mapFiltres[i].setAttribute('disabled', 'disabled');
     }
   };
 
+  checkDisabledFiltres();
+
+  // Функция активации фильтров
+  window.removeDisabledFiltres = function () {
+    for (var i = 0; i < mapFiltres.length; i++) {
+      mapFiltres[i].removeAttribute('disabled', 'disabled');
+    }
+  };
+
+  // Функция деактивации фильтров чекбоксов
+  var checkDisabledFiltrCheckboxes = function () {
+    for (var i = 0; i < mapFiltresCheckboxs.length; i++) {
+      mapFiltresCheckboxs[i].setAttribute('disabled', 'disabled');
+    }
+  };
+
+  checkDisabledFiltrCheckboxes();
+
+  // Функция активации фильтров чекбоксов
+  window.removeDisabledFiltrCheckboxes = function () {
+    for (var i = 0; i < mapFiltresCheckboxs.length; i++) {
+      mapFiltresCheckboxs[i].removeAttribute('disabled', 'disabled');
+    }
+  };
+
+  // Функция деактивации формы
+  var checkDisabled = function () {
+    for (var i = 0; i < sectionFieldset.length; i++) {
+      sectionFieldset[i].setAttribute('disabled', 'disabled');
+    }
+  };
+
+  checkDisabled();
+
   // Функция активации формы
   window.removeDisabled = function () {
-    for (var i = 0; i < window.sectionFieldset.length; i++) {
-      window.sectionFieldset[i].removeAttribute('disabled', 'disabled');
+    for (var i = 0; i < sectionFieldset.length; i++) {
+      sectionFieldset[i].removeAttribute('disabled', 'disabled');
     }
   };
 
   // Функция деактивации селекта количества гостей
   var disableAllCapacityOptions = function () {
-    for (var i = 0; i < window.forms.capacityOptions.length; i++) {
-      window.forms.capacityOptions[i].setAttribute('disabled', 'disabled');
+    for (var i = 0; i < capacityOptions.length; i++) {
+      capacityOptions[i].setAttribute('disabled', 'disabled');
     }
   };
 
   // Функция проверки соответствия комнат и гостей
   var changeOption = function () {
-    for (var i = 0; i <= window.forms.roomsCount.value - 1; i++) {
-      if (window.forms.roomsCount.value < 100) {
-        window.forms.capacityOptions[i].removeAttribute('disabled', 'disabled');
-      } else if (window.forms.roomsCount.value === 100 || i > 3) {
-        window.forms.placeNotForGuests.removeAttribute('disabled', 'disabled');
+    for (var i = 0; i <= roomsCount.value - 1; i++) {
+      if (roomsCount.value < 100) {
+        capacityOptions[i].removeAttribute('disabled', 'disabled');
+      } else if (roomsCount.value === 100 || i > 3) {
+        placeNotForGuests.removeAttribute('disabled', 'disabled');
       }
     }
   };
 
-  window.forms.roomsCount.addEventListener('change', disableAllCapacityOptions);
-  window.forms.roomsCount.addEventListener('change', changeOption);
+  roomsCount.addEventListener('change', disableAllCapacityOptions);
+  roomsCount.addEventListener('change', changeOption);
 
   var changeTimeOption = function (timeBefore, timeAfter) {
     timeAfter.value = timeBefore.value;
   };
 
-  window.forms.timeIn.addEventListener('change', function () {
+  timeIn.addEventListener('change', function () {
     changeTimeOption(timeIn, timeOut);
   });
 
-  window.forms.timeOut.addEventListener('change', function () {
+  timeOut.addEventListener('change', function () {
     changeTimeOption(timeOut, timeIn);
   });
 
