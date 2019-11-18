@@ -18,12 +18,27 @@
   var elevator = housingFeatures.querySelector('#filter-elevator');
   var conditioner = housingFeatures.querySelector('#filter-conditioner');
 
-  window.isRemovedPins = function () {
-    var renderPins = document.querySelectorAll('.map__pin');
-    for (var i = 0; i < renderPins.length; i++) {
-      if (!renderPins[i].classList.contains('map__pin--main')) {
-        renderPins[i].remove();
+  window.filter = {
+    isRemovedPins: function () {
+      var renderPins = document.querySelectorAll('.map__pin');
+      for (var i = 0; i < renderPins.length; i++) {
+        if (!renderPins[i].classList.contains('map__pin--main')) {
+          renderPins[i].remove();
+        }
       }
+    },
+    debounce: function (cb) {
+      var lastTimeout = null;
+
+      return function () {
+        var parameters = arguments;
+        if (lastTimeout) {
+          window.clearTimeout(lastTimeout);
+        }
+        lastTimeout = window.setTimeout(function () {
+          cb.apply(null, parameters);
+        }, DEBOUNCE_INTERVAL);
+      };
     }
   };
 
@@ -83,25 +98,11 @@
     });
   };
 
-  window.debounce = function (cb) {
-    var lastTimeout = null;
-
-    return function () {
-      var parameters = arguments;
-      if (lastTimeout) {
-        window.clearTimeout(lastTimeout);
-      }
-      lastTimeout = window.setTimeout(function () {
-        cb.apply(null, parameters);
-      }, DEBOUNCE_INTERVAL);
-    };
-  };
-
-  var onDebounce = window.debounce(function () {
-    window.removeActiveClass();
-    window.isRemovedPins();
+  var onDebounce = window.filter.debounce(function () {
+    window.util.removeActiveClass();
+    window.filter.isRemovedPins();
     isFilteredAds();
-    window.closePopup();
+    window.cards.closePopup();
     window.renderPins(window.filteredAds.slice(0, 5));
   });
 

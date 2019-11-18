@@ -13,7 +13,7 @@
 
     var onPopupPressEnter = function (evt) {
       if (evt.keyCode === window.util.ENTER_KEYCODE) {
-        window.closePopup();
+        window.cards.closePopup();
         openPin.removeEventListener('keydown', onPopupPressEnter);
       }
     };
@@ -22,12 +22,12 @@
   // Функция вызова карточки по клику пина
   var addClickListenerToPin = function (pin, card) {
     pin.addEventListener('click', function () {
-      window.closePopup();
+      window.cards.closePopup();
       openPopupEnter();
-      window.renderAds(card);
-      window.closePopupEsc();
-      window.closePopupHandler();
-      window.removeActiveClass();
+      window.cards.renderAds(card);
+      window.util.closePopupEsc();
+      window.util.onClosePopup();
+      window.util.removeActiveClass();
       pin.classList.add('map__pin--active');
     });
   };

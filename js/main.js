@@ -122,9 +122,9 @@
     if (evt.keyCode === window.util.ENTER_KEYCODE) {
       openPage();
       pageActivate();
-      window.removeDisabled();
-      window.removeDisabledFiltrCheckboxes();
-      window.removeDisabledFiltres();
+      window.forms.removeDisabled();
+      window.forms.removeDisabledFiltrCheckboxes();
+      window.forms.removeDisabledFiltres();
       window.main.activatePin.removeEventListener('keydown', onActivatePinEnter);
     }
   };
@@ -136,7 +136,7 @@
     openPage();
     window.forms.form.classList.remove('ad-form--disabled');
 
-    window.load(onSuccess, onError);
+    window.loading.load(onSuccess, onError);
 
     getPinCoords();
   };
@@ -149,8 +149,8 @@
       window.pinActive = true;
     }
 
-    window.removeDisabled();
-    window.removeDisabledFiltres();
-    window.removeDisabledFiltrCheckboxes();
+    window.forms.removeDisabled();
+    window.forms.removeDisabledFiltres();
+    window.forms.removeDisabledFiltrCheckboxes();
   });
 })();

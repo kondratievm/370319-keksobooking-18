@@ -29,6 +29,24 @@
   window.forms = {
     addressInput: addressInput,
     form: form,
+    // Функция активации фильтров
+    removeDisabledFiltres: function () {
+      for (var i = 0; i < mapFiltres.length; i++) {
+        mapFiltres[i].removeAttribute('disabled', 'disabled');
+      }
+    },
+    // Функция активации фильтров чекбоксов
+    removeDisabledFiltrCheckboxes: function () {
+      for (var i = 0; i < mapFiltresCheckboxs.length; i++) {
+        mapFiltresCheckboxs[i].removeAttribute('disabled', 'disabled');
+      }
+    },
+    // Функция активации формы
+    removeDisabled: function () {
+      for (var i = 0; i < sectionFieldsets.length; i++) {
+        sectionFieldsets[i].removeAttribute('disabled', 'disabled');
+      }
+    }
   };
 
   // Функция деактивации фильтров
@@ -40,13 +58,6 @@
 
   checkDisabledFiltres();
 
-  // Функция активации фильтров
-  window.removeDisabledFiltres = function () {
-    for (var i = 0; i < mapFiltres.length; i++) {
-      mapFiltres[i].removeAttribute('disabled', 'disabled');
-    }
-  };
-
   // Функция деактивации фильтров чекбоксов
   var checkDisabledFiltrCheckboxes = function () {
     for (var i = 0; i < mapFiltresCheckboxs.length; i++) {
@@ -56,13 +67,6 @@
 
   checkDisabledFiltrCheckboxes();
 
-  // Функция активации фильтров чекбоксов
-  window.removeDisabledFiltrCheckboxes = function () {
-    for (var i = 0; i < mapFiltresCheckboxs.length; i++) {
-      mapFiltresCheckboxs[i].removeAttribute('disabled', 'disabled');
-    }
-  };
-
   // Функция деактивации формы
   var checkDisabled = function () {
     for (var i = 0; i < sectionFieldsets.length; i++) {
@@ -71,13 +75,6 @@
   };
 
   checkDisabled();
-
-  // Функция активации формы
-  window.removeDisabled = function () {
-    for (var i = 0; i < sectionFieldsets.length; i++) {
-      sectionFieldsets[i].removeAttribute('disabled', 'disabled');
-    }
-  };
 
   // Функция деактивации селекта количества гостей
   var onDisableAllCapacityOptions = function () {
@@ -142,7 +139,7 @@
 
   form.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.upload(new FormData(form), onSuccess, onError);
+    window.loading.upload(new FormData(form), onSuccess, onError);
   });
 
   // Функция сброса формы
@@ -155,11 +152,11 @@
     window.main.activatePin.style.top = MAIN_PIN_TOP_COORD + 'px';
 
     window.main.map.classList.add('map--faded');
-    window.closePopup();
+    window.cards.closePopup();
 
     window.pinActive = false;
 
-    window.isRemovedPins();
+    window.filter.isRemovedPins();
     checkDisabledFiltres();
     checkDisabledFiltrCheckboxes();
     checkDisabled();
