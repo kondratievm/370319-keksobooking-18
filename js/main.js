@@ -2,12 +2,15 @@
 
 // Модуль main.js
 (function () {
-  window.activatePin = document.querySelector('.map__pin--main');
+  var MAX_Y_COORD = 130;
+  var MIN_Y_COORD = 630;
+  var activatePin = document.querySelector('.map__pin--main');
   var map = document.querySelector('.map');
   var pinTail = parseInt(window.getComputedStyle(document.querySelector('.map__pin--main'), ':after').height, 10);
 
   window.main = {
-    map: map
+    map: map,
+    activatePin: activatePin,
   };
 
   // Функция открытия страницы
@@ -19,15 +22,15 @@
   var getPinCoords = function () {
 
     window.addressCoords = {
-      x: window.activatePin.offsetLeft + Math.ceil(window.activatePin.offsetWidth / 2),
-      y: window.activatePin.offsetTop + Math.ceil(window.activatePin.offsetHeight + pinTail)
+      x: window.main.activatePin.offsetLeft + Math.ceil(window.main.activatePin.offsetWidth / 2),
+      y: window.main.activatePin.offsetTop + Math.ceil(window.main.activatePin.offsetHeight + pinTail)
     };
 
     window.forms.addressInput.value = window.addressCoords.x + ' ' + window.addressCoords.y;
   };
 
   // Функция движения главного пина
-  window.activatePin.addEventListener('mousedown', function (evt) {
+  window.main.activatePin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
     var startCoords = {
@@ -49,16 +52,16 @@
         y: moveEvt.clientY
       };
 
-      var nextX = window.activatePin.offsetLeft - shift.x + window.activatePin.offsetWidth / 2;
-      var nextY = window.activatePin.offsetTop - shift.y + window.activatePin.offsetHeight + pinTail;
+      var nextX = window.main.activatePin.offsetLeft - shift.x + window.main.activatePin.offsetWidth / 2;
+      var nextY = window.main.activatePin.offsetTop - shift.y + window.main.activatePin.offsetHeight + pinTail;
 
       var mapRect = map.getBoundingClientRect();
 
       if (nextX > 0 && nextX < mapRect.width && mapRect.x < moveEvt.clientX && moveEvt.clientX < mapRect.x + mapRect.width) {
-        window.activatePin.style.left = (window.activatePin.offsetLeft - shift.x) + 'px';
+        window.main.activatePin.style.left = (window.main.activatePin.offsetLeft - shift.x) + 'px';
       }
-      if (nextY > 130 && nextY < 630 && mapRect.y + 130 < moveEvt.clientY && moveEvt.clientY < mapRect.y + 630) {
-        window.activatePin.style.top = (window.activatePin.offsetTop - shift.y) + 'px';
+      if (nextY > MAX_Y_COORD && nextY < MIN_Y_COORD && mapRect.y + MAX_Y_COORD < moveEvt.clientY && moveEvt.clientY < mapRect.y + MIN_Y_COORD) {
+        window.main.activatePin.style.top = (window.main.activatePin.offsetTop - shift.y) + 'px';
       }
     };
 
@@ -75,7 +78,7 @@
 
   window.pinActive = false;
 
-  window.errorMessageShowing = function () {
+  window.showErrorMessage = function () {
     var errorPlace = document.querySelector('main');
     var errorTemplate = document.querySelector('#error').content.querySelector('.error');
     var fragment = document.createDocumentFragment();
@@ -88,16 +91,16 @@
   };
 
   var onError = function () {
-    window.errorMessageShowing();
+    window.showErrorMessage();
 
-    window.reloadButtonHandler = function (evt) {
+    window.onReloadButton = function (evt) {
       evt.preventDefault();
       window.errorMessage.remove();
       pageActivate();
-      window.reloadButton.removeEventListener('click', window.reloadButtonHandler);
+      window.reloadButton.removeEventListener('click', window.onReloadButton);
     };
 
-    window.reloadButton.addEventListener('click', window.reloadButtonHandler);
+    window.reloadButton.addEventListener('click', window.onReloadButton);
   };
 
   var popupContent = document.querySelector('.map__card');
@@ -108,23 +111,37 @@
     window.renderPins(window.ads);
 
     window.pins = document.querySelectorAll('.map__pin');
+    window.activePin = document.querySelector('.map__pin');
 
-    if (popupContent === undefined) {
+    if (popupContent !== null) {
       popupContent.setAttribute('hidden', 'hidden');
     }
   };
+
+  var onActivatePinEnter = function (evt) {
+    if (evt.keyCode === window.util.ENTER_KEYCODE) {
+      openPage();
+      pageActivate();
+      window.removeDisabled();
+      window.removeDisabledFiltrCheckboxes();
+      window.removeDisabledFiltres();
+      window.main.activatePin.removeEventListener('keydown', onActivatePinEnter);
+    }
+  };
+
+  window.main.activatePin.addEventListener('keydown', onActivatePinEnter);
 
   // Функция активации страницы
   var pageActivate = function () {
     openPage();
     window.forms.form.classList.remove('ad-form--disabled');
 
-    window.load('https://js.dump.academy/keksobooking/data', onSuccess, onError);
+    window.load(onSuccess, onError);
 
     getPinCoords();
   };
 
-  window.activatePin.addEventListener('mousedown', function () {
+  window.main.activatePin.addEventListener('mousedown', function () {
     getPinCoords();
 
     if (!window.pinActive) {
@@ -135,13 +152,5 @@
     window.removeDisabled();
     window.removeDisabledFiltres();
     window.removeDisabledFiltrCheckboxes();
-  });
-
-  window.activatePin.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === window.util.ENTER_KEYCODE) {
-      openPage();
-      pageActivate();
-      window.removeDisabled();
-    }
   });
 })();

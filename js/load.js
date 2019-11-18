@@ -4,7 +4,8 @@
   var TIME_OUT = 10000;
 
   // Функция загрузки
-  window.load = function (url, onSuccess, onError) {
+  window.load = function (onSuccess, onError) {
+    var loadUrl = 'https://js.dump.academy/keksobooking/data';
     var xhr = new XMLHttpRequest();
 
     xhr.responseType = 'json';
@@ -27,7 +28,7 @@
 
     xhr.timeout = TIME_OUT; // 10s
 
-    xhr.open('GET', url);
+    xhr.open('GET', loadUrl);
     xhr.send();
   };
 

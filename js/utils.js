@@ -24,7 +24,7 @@
   };
 
   // Функция сравнения названий
-  window.offerTranslatter = function (type) {
+  window.translateOffer = function (type) {
     switch (type) {
       case 'flat': type = 'Квартира';
         break;
@@ -44,26 +44,28 @@
 
     buttonClose.addEventListener('click', function () {
       window.closePopup();
-      window.removedActiveClass();
+      window.removeActiveClass();
     });
   };
 
-  // Функция удвления класса активного пина
-  window.removedActiveClass = function () {
-    for (var i = 0; i < window.pins.length; i++) {
-      if (window.pins[i].classList.contains('map__pin--active')) {
-        window.pins[i].classList.remove('map__pin--active');
-      }
-    }
+  // Функция удаления класса активного пина
+  window.removeActiveClass = function () {
+    var renderActivePins = document.querySelectorAll('.map__pin');
+    renderActivePins.forEach(function (renderActivePin) {
+      renderActivePin.classList.remove('map__pin--active');
+    });
   };
 
   // Функция закрытия попапа по клавише Esc
   window.closePopupEsc = function () {
-    document.addEventListener('keydown', function (evt) {
+    var onPopupPressEsc = function (evt) {
       if (evt.keyCode === window.util.ESC_KEYCODE) {
         window.closePopup();
+        document.removeEventListener('keydown', onPopupPressEsc);
       }
-      window.removedActiveClass();
-    });
+      window.removeActiveClass();
+    };
+
+    document.addEventListener('keydown', onPopupPressEsc);
   };
 })();

@@ -2,6 +2,8 @@
 
 // Модуль filter.js
 (function () {
+  var MIN_OFFER_PRICE = 10000;
+  var MAX_OFFER_PRICE = 50000;
   var DEBOUNCE_INTERVAL = 500; // ms
 
   var housingType = document.querySelector('#housing-type');
@@ -16,7 +18,7 @@
   var elevator = housingFeatures.querySelector('#filter-elevator');
   var conditioner = housingFeatures.querySelector('#filter-conditioner');
 
-  var removedPins = function () {
+  window.isRemovedPins = function () {
     var renderPins = document.querySelectorAll('.map__pin');
     for (var i = 0; i < renderPins.length; i++) {
       if (!renderPins[i].classList.contains('map__pin--main')) {
@@ -25,21 +27,21 @@
     }
   };
 
-  var filteredType = function (pin) {
+  var isFilteredType = function (pin) {
     if (housingType.value === 'any') {
       return true;
     }
     return pin.offer.type === housingType.value;
   };
 
-  var filteredPrice = function (pin) {
+  var isFilteredPrice = function (pin) {
     switch (housingPrice.value) {
       case 'low':
-        return pin.offer.price < 10000;
+        return pin.offer.price < MIN_OFFER_PRICE;
       case 'high':
-        return pin.offer.price > 50000;
+        return pin.offer.price > MAX_OFFER_PRICE;
       case 'middle':
-        return pin.offer.price >= 10000 && pin.offer.price <= 50000;
+        return pin.offer.price >= MIN_OFFER_PRICE && pin.offer.price <= MAX_OFFER_PRICE;
       default:
         return true;
     }
@@ -66,10 +68,10 @@
     return true;
   };
 
-  var getFilteredAds = function () {
+  var isFilteredAds = function () {
     window.filteredAds = window.ads.filter(function (pin) {
-      return filteredType(pin)
-          && filteredPrice(pin)
+      return isFilteredType(pin)
+          && isFilteredPrice(pin)
           && filteredRoom(pin)
           && filteredGuests(pin)
           && filteredFeature(pin, wifi)
@@ -80,26 +82,6 @@
           && filteredFeature(pin, conditioner);
     });
   };
-
-  housingType.addEventListener('change', function () {
-    onDebounce();
-  });
-
-  housingPrice.addEventListener('change', function () {
-    onDebounce();
-  });
-
-  housingRoom.addEventListener('change', function () {
-    onDebounce();
-  });
-
-  housingGuest.addEventListener('change', function () {
-    onDebounce();
-  });
-
-  housingFeatures.addEventListener('change', function () {
-    onDebounce();
-  });
 
   window.debounce = function (cb) {
     var lastTimeout = null;
@@ -116,9 +98,20 @@
   };
 
   var onDebounce = window.debounce(function () {
-    removedPins();
-    getFilteredAds();
+    window.removeActiveClass();
+    window.isRemovedPins();
+    isFilteredAds();
     window.closePopup();
     window.renderPins(window.filteredAds.slice(0, 5));
   });
+
+  housingType.addEventListener('change', onDebounce);
+
+  housingPrice.addEventListener('change', onDebounce);
+
+  housingRoom.addEventListener('change', onDebounce);
+
+  housingGuest.addEventListener('change', onDebounce);
+
+  housingFeatures.addEventListener('change', onDebounce);
 })();

@@ -2,8 +2,17 @@
 
 // Модуль forms.js
 (function () {
+  var BUNGALO_PRICE = 0;
+  var FLAT_PRICE = 1000;
+  var HOUSE_PRICE = 5000;
+  var PALACE_PRICE = 10000;
+  var MAX_ROOMS_COUNT = 100;
+  var THREE_ROOMS_COUNT = 3;
+  var MAIN_PIN_LEFT_COORD = 570;
+  var MAIN_PIN_TOP_COORD = 375;
   var sectionForm = document.querySelector('.notice');
-  var sectionFieldset = sectionForm.querySelectorAll('fieldset');
+  var sectionFieldsets = sectionForm.querySelectorAll('fieldset');
+  var filterForm = document.querySelector('.map__filters');
   var mapFiltres = document.querySelectorAll('.map__filter');
   var mapFiltresCheckboxs = document.querySelectorAll('.map__checkbox');
   var addressInput = document.querySelector('#address');
@@ -20,7 +29,6 @@
   window.forms = {
     addressInput: addressInput,
     form: form,
-    placesCount: placesCount,
   };
 
   // Функция деактивации фильтров
@@ -57,8 +65,8 @@
 
   // Функция деактивации формы
   var checkDisabled = function () {
-    for (var i = 0; i < sectionFieldset.length; i++) {
-      sectionFieldset[i].setAttribute('disabled', 'disabled');
+    for (var i = 0; i < sectionFieldsets.length; i++) {
+      sectionFieldsets[i].setAttribute('disabled', 'disabled');
     }
   };
 
@@ -66,31 +74,31 @@
 
   // Функция активации формы
   window.removeDisabled = function () {
-    for (var i = 0; i < sectionFieldset.length; i++) {
-      sectionFieldset[i].removeAttribute('disabled', 'disabled');
+    for (var i = 0; i < sectionFieldsets.length; i++) {
+      sectionFieldsets[i].removeAttribute('disabled', 'disabled');
     }
   };
 
   // Функция деактивации селекта количества гостей
-  var disableAllCapacityOptions = function () {
+  var onDisableAllCapacityOptions = function () {
     for (var i = 0; i < capacityOptions.length; i++) {
       capacityOptions[i].setAttribute('disabled', 'disabled');
     }
   };
 
   // Функция проверки соответствия комнат и гостей
-  var changeOption = function () {
+  var onChangeOption = function () {
     for (var i = 0; i <= roomsCount.value - 1; i++) {
-      if (roomsCount.value < 100) {
+      if (roomsCount.value < MAX_ROOMS_COUNT) {
         capacityOptions[i].removeAttribute('disabled', 'disabled');
-      } else if (roomsCount.value === 100 || i > 3) {
+      } else if (roomsCount.value === MAX_ROOMS_COUNT || i > THREE_ROOMS_COUNT) {
         placeNotForGuests.removeAttribute('disabled', 'disabled');
       }
     }
   };
 
-  roomsCount.addEventListener('change', disableAllCapacityOptions);
-  roomsCount.addEventListener('change', changeOption);
+  roomsCount.addEventListener('change', onDisableAllCapacityOptions);
+  roomsCount.addEventListener('change', onChangeOption);
 
   var changeTimeOption = function (timeBefore, timeAfter) {
     timeAfter.value = timeBefore.value;
@@ -109,29 +117,27 @@
     switch (typeValue.value) {
       case ('bungalo'):
         priceValue.value = '0';
-        priceValue.setAttribute('min', 0);
+        priceValue.setAttribute('min', BUNGALO_PRICE);
         break;
       case ('flat'):
         priceValue.value = '1000';
-        priceValue.setAttribute('min', 1000);
+        priceValue.setAttribute('min', FLAT_PRICE);
         break;
       case ('house'):
         priceValue.value = '5000';
-        priceValue.setAttribute('min', 5000);
+        priceValue.setAttribute('min', HOUSE_PRICE);
         break;
       case ('palace'):
         priceValue.value = '10000';
-        priceValue.setAttribute('min', 10000);
+        priceValue.setAttribute('min', PALACE_PRICE);
         break;
     }
   };
 
+  changePrice(type, price);
+
   type.addEventListener('change', function () {
     changePrice(type, price);
-  });
-
-  price.addEventListener('change', function () {
-    changePrice(price, type);
   });
 
   form.addEventListener('submit', function (evt) {
@@ -139,30 +145,34 @@
     window.upload(new FormData(form), onSuccess, onError);
   });
 
-  var buttonReset = document.querySelector('.ad-form__reset');
-
   // Функция сброса формы
-  buttonReset.addEventListener('click', function () {
-    window.forms.form.reset();
-  });
-
-  var onSuccess = function () {
+  var resetForm = function () {
     window.forms.form.classList.add('ad-form--disabled');
+    window.forms.form.setAttribute('disabled', 'disabled');
     window.forms.form.reset();
-
-    for (var i = 0; i < window.pins.length; i++) {
-      if (!window.pins[i].classList.contains('map__pin--main')) {
-        window.pins[i].remove();
-      }
-    }
-
-    window.activatePin.style.left = 570 + 'px';
-    window.activatePin.style.top = 375 + 'px';
+    filterForm.reset();
+    window.main.activatePin.style.left = MAIN_PIN_LEFT_COORD + 'px';
+    window.main.activatePin.style.top = MAIN_PIN_TOP_COORD + 'px';
 
     window.main.map.classList.add('map--faded');
     window.closePopup();
 
     window.pinActive = false;
+
+    window.isRemovedPins();
+    checkDisabledFiltres();
+    checkDisabledFiltrCheckboxes();
+    checkDisabled();
+  };
+
+  var buttonReset = document.querySelector('.ad-form__reset');
+
+  buttonReset.addEventListener('click', function () {
+    resetForm();
+  });
+
+  var onSuccess = function () {
+    resetForm();
 
     var successPlace = document.querySelector('main');
     var successTemplate = document.querySelector('#success').content.querySelector('.success');
@@ -171,11 +181,14 @@
     fragment.appendChild(element);
     successPlace.appendChild(fragment);
 
-    document.addEventListener('keydown', function (evt) {
+    var onMessageEscPress = function (evt) {
       if (evt.keyCode === window.util.ESC_KEYCODE) {
         element.remove();
+        document.removeEventListener('keydown', onMessageEscPress);
       }
-    });
+    };
+
+    document.addEventListener('keydown', onMessageEscPress);
 
     document.addEventListener('click', function () {
       element.remove();
@@ -187,19 +200,22 @@
 
     var reloadButton = document.querySelector('.error__button');
 
-    var reloadButtonHandler = function (evt) {
+    var onReloadButton = function (evt) {
       evt.preventDefault();
       window.errorMessage.remove();
-      reloadButton.removeEventListener('click', reloadButtonHandler);
+      reloadButton.removeEventListener('click', onReloadButton);
     };
 
-    reloadButton.addEventListener('click', reloadButtonHandler);
+    reloadButton.addEventListener('click', onReloadButton);
 
-    document.addEventListener('keydown', function (evt) {
+    var onMessageEscPressWindowElement = function (evt) {
       if (evt.keyCode === window.util.ESC_KEYCODE) {
         window.element.remove();
+        document.removeEventListener('keydown', onMessageEscPressWindowElement);
       }
-    });
+    };
+
+    document.addEventListener('keydown', onMessageEscPressWindowElement);
 
     document.addEventListener('click', function () {
       window.element.remove();
